@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://settings.png" type="Texture" id=1]
-[ext_resource path="res://send.png" type="Texture" id=2]
+[ext_resource path="res://resources/settings.png" type="Texture" id=1]
+[ext_resource path="res://resources/send.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
 
@@ -20,7 +20,12 @@ func _on_CBTwitter_toggled(button_pressed):
 		limit_container.show()
 	else:
 		limit_container.hide()
-"
+
+
+func _on_TBSettings_pressed():
+	var setting_scene = load('res://setting_scenes/PanelSettings.tscn')
+	var setting = setting_scene.instance()
+	self.add_child(setting)"
 
 [sub_resource type="GDScript" id=2]
 
@@ -43,6 +48,20 @@ func _unhandled_key_input(event):
 func update_limit():
 	get_parent().get_node('HBoxContainer/LBLCurr').set_text(str(word_count))"
 
+[sub_resource type="GDScript" id=3]
+
+script/source = "extends TextureButton
+
+func _ready():
+	# Called when the node is added to the scene for the first time.
+	# Initialization here
+	pass
+
+func _on_TBSend_pressed():
+	var output = []
+	var pid = OS.execute('python3', ['discord_webhook.py'], true)
+"
+
 [node name="BaseNode" type="Node" index="0"]
 
 script = SubResource( 1 )
@@ -62,6 +81,7 @@ size_flags_vertical = 1
 
 [node name="Panel" type="Panel" parent="Container" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -76,7 +96,6 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Container/Panel" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -140,38 +159,14 @@ text = "Email"
 flat = false
 align = 0
 
-[node name="CBFacebook" type="CheckBox" parent="Container/Panel/HBoxContainer" index="2"]
+[node name="CBSlack" type="CheckBox" parent="Container/Panel/HBoxContainer" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 148.0
-margin_right = 236.0
-margin_bottom = 38.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = true
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Facebook"
-flat = false
-align = 0
-
-[node name="CBSlack" type="CheckBox" parent="Container/Panel/HBoxContainer" index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 240.0
-margin_right = 300.0
+margin_right = 208.0
 margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -188,14 +183,14 @@ text = "Slack"
 flat = false
 align = 0
 
-[node name="CBText" type="CheckBox" parent="Container/Panel/HBoxContainer" index="4"]
+[node name="CBText" type="CheckBox" parent="Container/Panel/HBoxContainer" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 304.0
-margin_right = 359.0
+margin_left = 212.0
+margin_right = 267.0
 margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -212,14 +207,14 @@ text = "Text"
 flat = false
 align = 0
 
-[node name="CBTwitter" type="CheckBox" parent="Container/Panel/HBoxContainer" index="5"]
+[node name="CBTwitter" type="CheckBox" parent="Container/Panel/HBoxContainer" index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 363.0
-margin_right = 435.0
+margin_left = 271.0
+margin_right = 343.0
 margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -340,10 +335,12 @@ enabled_focus_mode = 2
 shortcut = null
 group = null
 texture_normal = ExtResource( 2 )
+script = SubResource( 3 )
 _sections_unfolded = [ "Textures" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Container" index="5"]
 
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -446,5 +443,9 @@ lines_skipped = 0
 max_lines_visible = -1
 
 [connection signal="toggled" from="Container/Panel/HBoxContainer/CBTwitter" to="." method="_on_CBTwitter_toggled"]
+
+[connection signal="pressed" from="Container/TBSettings" to="." method="_on_TBSettings_pressed"]
+
+[connection signal="pressed" from="Container/TBSend" to="Container/TBSend" method="_on_TBSend_pressed"]
 
 
