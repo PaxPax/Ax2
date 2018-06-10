@@ -62,7 +62,7 @@ func _on_TBSend_pressed():
 	var pid = OS.execute('python3', ['discord_webhook.py'], true)
 "
 
-[node name="BaseNode" type="Node" index="0"]
+[node name="BaseNode" type="Node"]
 
 script = SubResource( 1 )
 
@@ -426,10 +426,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 726.0
-margin_top = 130.0
-margin_right = 2891.0
-margin_bottom = 144.0
+margin_left = -620.0
+margin_top = 380.0
+margin_right = 1705.0
+margin_bottom = 411.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
