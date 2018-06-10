@@ -50,7 +50,7 @@ def create_email(email_object,special_connection, email_config):
         email_object.ehlo()
         email_object.starttls()
     email_object.login(email_config['address'], email_config['password'])
-    #TODO get a list of the recipeints and loop through messaging each one
+
     email_recep = get_email_addresses()
     for recipeint in email_recep:
         failed_messages = email_object.sendmail(email_config['address'], recipeint, 'Subject: Announcement \n' +email_content)

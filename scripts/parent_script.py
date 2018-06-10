@@ -1,6 +1,6 @@
 from threading import Thread
 import configparser
-import discord_webhook, user_email, slack_webhook, text, twitter
+import discord_webhook, user_email, slack_webhook,send_sms, send_twitter
 
 def get_selected_options():
     temp = {}
@@ -18,7 +18,7 @@ def get_selected_options():
 
 def check_selected_options():
     selected_values = get_selected_options()
-    imported_values = [discord_webhook, user_email, slack_webhook, text, twitter]
+    imported_values = [discord_webhook, user_email, slack_webhook, send_sms, send_twitter]
     tmp_value = []
     for key in selected_values:
         if selected_values[key] == "False":
