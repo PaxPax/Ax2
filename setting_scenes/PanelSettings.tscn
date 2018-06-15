@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://setting_scenes/PanelDiscord.tscn" type="PackedScene" id=1]
 [ext_resource path="res://setting_scenes/PanelEmail.tscn" type="PackedScene" id=2]
@@ -67,6 +67,26 @@ func _on_Button_pressed():
 	pass # replace with function body
 "
 
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends Button
+
+var configFile
+var discord_settings
+
+func _ready():
+	configFile = ConfigFile.new()
+	discord_settings = get_parent().get_parent().get_node('PanelDiscord')
+	load_discord_config()
+
+func load_discord_config():
+	var le_webhook = discord_settings.get_node('Label/LineEditWebhook')
+	var le_username = discord_settings.get_node('Label2/LineEditUsername')
+	var le_avatar = discord_settings.get_node('Label3/LineEditAvatar')
+
+	configFile.load('res://config_folder/discord_config.cfg')
+	print(configFile.get_value('discord','username'))"
+
 [node name="PanelSettings" type="Panel" index="0"]
 
 anchor_left = 0.0
@@ -83,7 +103,6 @@ script = SubResource( 1 )
 
 [node name="Panel" type="Panel" parent="." index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -122,6 +141,7 @@ group = null
 text = "Discord"
 flat = false
 align = 1
+script = SubResource( 2 )
 
 [node name="BtnEmail" type="Button" parent="Panel" index="1"]
 
@@ -200,6 +220,7 @@ align = 1
 
 [node name="BtnTwitter" type="Button" parent="Panel" index="4"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -282,6 +303,8 @@ align = 1
 [node name="PanelText" parent="." index="6" instance=ExtResource( 4 )]
 
 [node name="PanelTwitter" parent="." index="7" instance=ExtResource( 5 )]
+
+visible = false
 
 [connection signal="pressed" from="Panel/BtnDiscord" to="." method="_on_BtnDiscord_pressed"]
 

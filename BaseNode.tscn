@@ -59,7 +59,8 @@ func _ready():
 
 func _on_TBSend_pressed():
 	var output = []
-	var pid = OS.execute('python3', ['discord_webhook.py'], true)
+	var pid = OS.execute('python3', ['../scripts/parent_script.py'], true)
+	print(pid)
 "
 
 [node name="BaseNode" type="Node"]
@@ -81,7 +82,6 @@ size_flags_vertical = 1
 
 [node name="Panel" type="Panel" parent="Container" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -204,30 +204,6 @@ enabled_focus_mode = 2
 shortcut = null
 group = null
 text = "Text"
-flat = false
-align = 0
-
-[node name="CBTwitter" type="CheckBox" parent="Container/Panel/HBoxContainer" index="4"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 271.0
-margin_right = 343.0
-margin_bottom = 38.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = true
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Twitter"
 flat = false
 align = 0
 
@@ -441,8 +417,6 @@ text = "<div>Icons made by <a href=\"https://www.flaticon.com/authors/pixel-budd
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-
-[connection signal="toggled" from="Container/Panel/HBoxContainer/CBTwitter" to="." method="_on_CBTwitter_toggled"]
 
 [connection signal="pressed" from="Container/TBSettings" to="." method="_on_TBSettings_pressed"]
 

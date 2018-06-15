@@ -37,7 +37,7 @@ func _on_Button2_pressed():
 	self.hide()
 "
 
-[node name="PanelDiscord" type="Panel"]
+[node name="PanelDiscord" type="Panel" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -57,7 +57,6 @@ _sections_unfolded = [ "Rect", "Theme", "custom_styles" ]
 
 [node name="Label" type="Label" parent="." index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -79,7 +78,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors" ]
 
-[node name="LineEdit" type="LineEdit" parent="Label" index="0"]
+[node name="LineEditWebhook" type="LineEdit" parent="Label" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -105,7 +104,6 @@ caret_position = 0
 
 [node name="Label2" type="Label" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -127,7 +125,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors" ]
 
-[node name="LineEdit" type="LineEdit" parent="Label2" index="0"]
+[node name="LineEditUsername" type="LineEdit" parent="Label2" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -153,7 +151,6 @@ caret_position = 0
 
 [node name="Label3" type="Label" parent="." index="2"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -175,7 +172,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors" ]
 
-[node name="LineEdit" type="LineEdit" parent="Label3" index="0"]
+[node name="LineEditAvatar" type="LineEdit" parent="Label3" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
