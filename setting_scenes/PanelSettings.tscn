@@ -4,7 +4,6 @@
 [ext_resource path="res://setting_scenes/PanelEmail.tscn" type="PackedScene" id=2]
 [ext_resource path="res://setting_scenes/PanelSlack.tscn" type="PackedScene" id=3]
 [ext_resource path="res://setting_scenes/PanelText.tscn" type="PackedScene" id=4]
-[ext_resource path="res://setting_scenes/PanelTwitter.tscn" type="PackedScene" id=5]
 
 [sub_resource type="GDScript" id=1]
 
@@ -85,7 +84,18 @@ func load_discord_config():
 	var le_avatar = discord_settings.get_node('Label3/LineEditAvatar')
 
 	configFile.load('res://config_folder/discord_config.cfg')
-	print(configFile.get_value('discord','username'))"
+	le_username.set_text(configFile.get_value('discord','username'))"
+
+[sub_resource type="GDScript" id=3]
+
+script/source = "extends Button
+#This where everything will be saved
+
+func _ready():
+	# Called when the node is added to the scene for the first time.
+	# Initialization here
+	pass
+"
 
 [node name="PanelSettings" type="Panel" index="0"]
 
@@ -101,7 +111,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 script = SubResource( 1 )
 
-[node name="Panel" type="Panel" parent="." index="0"]
+[node name="PanelOptions" type="Panel" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -117,7 +127,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 _sections_unfolded = [ "custom_styles" ]
 
-[node name="BtnDiscord" type="Button" parent="Panel" index="0"]
+[node name="BtnDiscord" type="Button" parent="PanelOptions" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -143,7 +153,7 @@ flat = false
 align = 1
 script = SubResource( 2 )
 
-[node name="BtnEmail" type="Button" parent="Panel" index="1"]
+[node name="BtnEmail" type="Button" parent="PanelOptions" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -168,7 +178,7 @@ text = "Email"
 flat = false
 align = 1
 
-[node name="BtnSlack" type="Button" parent="Panel" index="2"]
+[node name="BtnSlack" type="Button" parent="PanelOptions" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -193,7 +203,7 @@ text = "Slack"
 flat = false
 align = 1
 
-[node name="BtnText" type="Button" parent="Panel" index="3"]
+[node name="BtnText" type="Button" parent="PanelOptions" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -218,33 +228,7 @@ text = "Text"
 flat = false
 align = 1
 
-[node name="BtnTwitter" type="Button" parent="Panel" index="4"]
-
-visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 13.0
-margin_top = 229.0
-margin_right = 133.0
-margin_bottom = 259.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Twitter"
-flat = false
-align = 1
-
-[node name="Button" type="Button" parent="." index="1"]
+[node name="BtnSave" type="Button" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -268,8 +252,9 @@ group = null
 text = "Save"
 flat = false
 align = 1
+script = SubResource( 3 )
 
-[node name="Button2" type="Button" parent="." index="2"]
+[node name="BtnCancle" type="Button" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -302,22 +287,16 @@ align = 1
 
 [node name="PanelText" parent="." index="6" instance=ExtResource( 4 )]
 
-[node name="PanelTwitter" parent="." index="7" instance=ExtResource( 5 )]
+[connection signal="pressed" from="PanelOptions/BtnDiscord" to="." method="_on_BtnDiscord_pressed"]
 
-visible = false
+[connection signal="pressed" from="PanelOptions/BtnEmail" to="." method="_on_BtnEmail_pressed"]
 
-[connection signal="pressed" from="Panel/BtnDiscord" to="." method="_on_BtnDiscord_pressed"]
+[connection signal="pressed" from="PanelOptions/BtnSlack" to="." method="_on_BtnSlack_pressed"]
 
-[connection signal="pressed" from="Panel/BtnEmail" to="." method="_on_BtnEmail_pressed"]
+[connection signal="pressed" from="PanelOptions/BtnText" to="." method="_on_BtnText_pressed"]
 
-[connection signal="pressed" from="Panel/BtnSlack" to="." method="_on_BtnSlack_pressed"]
+[connection signal="pressed" from="BtnSave" to="." method="_on_Button_pressed"]
 
-[connection signal="pressed" from="Panel/BtnText" to="." method="_on_BtnText_pressed"]
-
-[connection signal="pressed" from="Panel/BtnTwitter" to="." method="_on_BtnTwitter_pressed"]
-
-[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
-
-[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="BtnCancle" to="." method="_on_Button2_pressed"]
 
 
