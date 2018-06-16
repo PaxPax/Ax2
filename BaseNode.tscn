@@ -15,12 +15,6 @@ func _ready():
 	limit_container = get_node('Container/HBoxContainer')
 	update_curr_lbl = get_node('Container/HBoxContainer/LBLCurr')
 
-func _on_CBTwitter_toggled(button_pressed):
-	if button_pressed:
-		limit_container.show()
-	else:
-		limit_container.hide()
-
 
 func _on_TBSettings_pressed():
 	var setting_scene = load('res://setting_scenes/PanelSettings.tscn')

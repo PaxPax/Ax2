@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://setting_scenes/PanelDiscord.tscn" type="PackedScene" id=1]
 [ext_resource path="res://setting_scenes/PanelEmail.tscn" type="PackedScene" id=2]
@@ -19,14 +19,12 @@ func _ready():
 	email = get_node('PanelEmail')
 	text = get_node('PanelText')
 	slack = get_node('PanelSlack')
-	twitter = get_node('PanelTwitter')
 	discord = get_node('PanelDiscord')
 
 func _on_BtnDiscord_pressed():
 	email.hide()
 	text.hide()
 	slack.hide()
-	twitter.hide()
 	discord.show()
 
 
@@ -34,37 +32,28 @@ func _on_BtnEmail_pressed():
 	email.show()
 	text.hide()
 	slack.hide()
-	twitter.hide()
 	discord.hide()
 
 func _on_BtnSlack_pressed():
 	slack.show()
 	email.hide()
 	text.hide()
-	twitter.hide()
 	discord.hide()
 	
 func _on_BtnText_pressed():
 	text.show()
 	email.hide()
 	slack.hide()
-	twitter.hide()
 	discord.hide()
 	
 func _on_BtnTwitter_pressed():
-	twitter.show()
 	email.hide()
 	text.hide()
 	slack.hide()
 	discord.hide()
 
 func _on_Button2_pressed():
-	self.hide()
-
-
-func _on_Button_pressed():
-	pass # replace with function body
-"
+	self.hide()"
 
 [sub_resource type="GDScript" id=2]
 
@@ -72,7 +61,7 @@ script/source = "extends Button
 
 var configFile
 var discord_settings
-
+const discord_path = 'res://config_folder/discord_config.cfg'
 func _ready():
 	configFile = ConfigFile.new()
 	discord_settings = get_parent().get_parent().get_node('PanelDiscord')
@@ -82,11 +71,105 @@ func load_discord_config():
 	var le_webhook = discord_settings.get_node('Label/LineEditWebhook')
 	var le_username = discord_settings.get_node('Label2/LineEditUsername')
 	var le_avatar = discord_settings.get_node('Label3/LineEditAvatar')
+	var file_check = File.new()
+	if not file_check.file_exists(discord_path):
+		return
 
-	configFile.load('res://config_folder/discord_config.cfg')
-	le_username.set_text(configFile.get_value('discord','username'))"
+	configFile.load(discord_path)
+	if(configFile.has_section_key('discord', 'username')):
+		le_username.set_text(configFile.get_value('discord','username'))
+	if(configFile.has_section_key('discord', 'avatar_url')):
+		le_avatar.set_text(configFile.get_value('discord', 'avatar_url'))
+	if(configFile.has_section_key('discord', 'webhook')):
+		le_webhook.set_text(configFile.get_value('discord', 'webhook'))
+	file_check.close()"
 
 [sub_resource type="GDScript" id=3]
+
+script/source = "extends Button
+
+var config
+var email_settings
+const email_path = 'res://config_folder/email_config.cfg'
+func _ready():
+	config = ConfigFile.new()
+	email_settings = get_parent().get_parent().get_node('PanelEmail')
+	load_email_config()
+
+func load_email_config():
+	var le_host = email_settings.get_node('Label/LineEditHost')
+	var le_addr = email_settings.get_node('Label3/LineEditAddr')
+	var le_port = email_settings.get_node('Label2/LineEditPort')
+	var le_pw = email_settings.get_node('Label4/LineEditPW')
+	var file_check = File.new()
+	
+	if not file_check.file_exists(email_path):
+		return
+	config.load(email_path)
+	if config.has_section_key('email', 'host'):
+		le_host.set_text(config.get_value('email', 'host'))
+	if config.has_section_key('email', 'address'):
+		le_addr.set_text(config.get_value('email', 'address'))
+	if config.has_section_key('email', 'port'):
+		le_port.set_text(config.get_value('email', 'port'))
+	if config.has_section_key('email', 'password'):
+		le_pw.set_text(config.get_value('email', 'password'))
+	file_check.close()"
+
+[sub_resource type="GDScript" id=5]
+
+script/source = "extends Button
+
+var config
+var slack_settings
+const slack_path = 'res://config_folder/slack_config.cfg'
+func _ready():
+	config = ConfigFile.new()
+	slack_settings = get_parent().get_parent().get_node('PanelSlack')
+	load_slack()
+
+func load_slack():
+	var file_check = File.new()
+	var le_webhook = slack_settings.get_node('Label/LineEditWebhook')
+	var le_username = slack_settings.get_node('Label2/LineEditUsername')
+	
+	if not file_check.file_exists(slack_path):
+		file_check.close()
+		return
+	config.load(slack_path)
+	if config.has_section_key('slack', 'webhook'):
+		le_webhook.set_text(config.get_value('slack', 'webhook'))
+	if config.has_section_key('slack', 'username'):
+		le_username.set_text(config.get_value('slack', 'username'))
+	file_check.close()"
+
+[sub_resource type="GDScript" id=6]
+
+script/source = "extends Button
+
+var text_settings
+var config
+const text_path = 'res://config_folder/text_config.cfg'
+
+func _ready():
+	text_settings = get_parent().get_parent().get_node('PanelText')
+	config = ConfigFile.new()
+	load_text_config()
+
+func load_text_config():
+	var file_check = File.new()
+	var le_accountsid = text_settings.get_node('Label/LineEditAccountSID')
+	var le_authtoken = text_settings.get_node('Label2/LineEditAuthToken')
+	
+	if not file_check.file_exists(text_path):
+		return
+	config.load(text_path)
+	if config.has_section_key('text', 'accountsid'):
+		le_accountsid.set_text(config.get_value('text', 'accountsid'))
+	if config.has_section_key('text', 'authtoken'):
+		le_authtoken.set_Text(config.get_value('text', 'authtoken'))"
+
+[sub_resource type="GDScript" id=4]
 
 script/source = "extends Button
 #This where everything will be saved
@@ -177,6 +260,7 @@ group = null
 text = "Email"
 flat = false
 align = 1
+script = SubResource( 3 )
 
 [node name="BtnSlack" type="Button" parent="PanelOptions" index="2"]
 
@@ -202,6 +286,7 @@ group = null
 text = "Slack"
 flat = false
 align = 1
+script = SubResource( 5 )
 
 [node name="BtnText" type="Button" parent="PanelOptions" index="3"]
 
@@ -227,6 +312,7 @@ group = null
 text = "Text"
 flat = false
 align = 1
+script = SubResource( 6 )
 
 [node name="BtnSave" type="Button" parent="." index="1"]
 
@@ -252,7 +338,7 @@ group = null
 text = "Save"
 flat = false
 align = 1
-script = SubResource( 3 )
+script = SubResource( 4 )
 
 [node name="BtnCancle" type="Button" parent="." index="2"]
 
@@ -281,6 +367,8 @@ align = 1
 
 [node name="PanelDiscord" parent="." index="3" instance=ExtResource( 1 )]
 
+script = null
+
 [node name="PanelEmail" parent="." index="4" instance=ExtResource( 2 )]
 
 [node name="PanelSlack" parent="." index="5" instance=ExtResource( 3 )]
@@ -294,8 +382,6 @@ align = 1
 [connection signal="pressed" from="PanelOptions/BtnSlack" to="." method="_on_BtnSlack_pressed"]
 
 [connection signal="pressed" from="PanelOptions/BtnText" to="." method="_on_BtnText_pressed"]
-
-[connection signal="pressed" from="BtnSave" to="." method="_on_Button_pressed"]
 
 [connection signal="pressed" from="BtnCancle" to="." method="_on_Button2_pressed"]
 
