@@ -50,8 +50,8 @@ var cb_discord
 var cb_email
 var cb_slack
 var cb_text
-var path = 'res://config_folder/selected_options.cfg'
-
+const path = 'res://config_folder/selected_options.cfg'
+const save_path = 'res://message/user_message.txt'
 func _ready():
 	cb_discord = get_parent().get_node('Panel/HBoxContainer/CBDiscord')
 	cb_email = get_parent().get_node('Panel/HBoxContainer/CBEmail')
@@ -60,6 +60,7 @@ func _ready():
 
 func _on_TBSend_pressed():
 	adjust_selected_options()
+	save_message()
 	var output = []
 	var pid = OS.execute('python3', ['../scripts/parent_script.py'], true)
 	clear_options()
@@ -76,6 +77,17 @@ func adjust_selected_options():
 		config.set_value('selected', 'text', 'True')
 	config.save(path)
 
+func save_message():
+	var file_out = File.new()
+	var te_message = get_parent().get_node('TextEdit').get_text()
+	if not file_out.file_exists(save_path):
+		return
+	if te_message == '':
+		return
+	file_out.open(save_path, File.WRITE)
+	file_out.store_string(te_message)
+	file_out.close()
+
 func clear_options():
 	var clear_config = ConfigFile.new()
 	clear_config.set_value('selected', 'discord', 'False')
@@ -90,7 +102,6 @@ script = SubResource( 1 )
 
 [node name="Container" type="Container" parent="." index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -104,6 +115,7 @@ size_flags_vertical = 1
 
 [node name="Panel" type="Panel" parent="Container" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
