@@ -15,6 +15,11 @@ var slack
 var twitter
 var discord
 
+const discord_path = 'res://config_folder/discord_config.cfg'
+const email_path   = 'res://config_folder/email_config.cfg'
+const slack_path   = 'res://config_folder/slack_config.cfg'
+const text_path    = 'res://config_folder/text_config.cfg'
+
 func _ready():
 	email = get_node('PanelEmail')
 	text = get_node('PanelText')
@@ -53,6 +58,58 @@ func _on_BtnTwitter_pressed():
 	discord.hide()
 
 func _on_Button2_pressed():
+	self.hide()
+
+func _on_BtnSave_pressed():
+	save_discord_settings()
+	save_email_settings()
+	save_slack_settings()
+	save_text_settings()
+	hide_settings()
+
+func save_discord_settings():
+	var config = ConfigFile.new()
+	var le_discord_username = discord.get_node('Label2/LineEditUsername').get_text()
+	var le_discord_avatar = discord.get_node('Label2/LineEditUsername').get_text()
+	var le_discord_webhook = discord.get_node('Label/LineEditWebhook').get_text()
+	
+	config.set_value('discord', 'username', le_discord_username)
+	config.set_value('discord', 'avatar_url', le_discord_avatar)
+	config.set_value('discord', 'webhook', le_discord_webhook)
+	config.save(discord_path)
+	
+func save_email_settings():
+	var email_config = ConfigFile.new()
+	var le_email_host = email.get_node('Label/LineEditHost').get_text()
+	var le_email_port = email.get_node('Label2/LineEditPort').get_text()
+	var le_email_address = email.get_node('Label3/LineEditAddr').get_text()
+	var le_email_pw = email.get_node('Label4/LineEditPW').get_text()
+	
+	email_config.set_value('email', 'host', le_email_address)
+	email_config.set_value('email', 'port', le_email_port)
+	email_config.set_value('email', 'address', le_email_address)
+	email_config.set_value('email', 'password', le_email_pw)
+	email_config.save(email_path)
+
+func save_slack_settings():
+	var slack_config = ConfigFile.new()
+	var le_slack_webhook = slack.get_node('Label/LineEditWebhook').get_text()
+	var le_slack_username = slack.get_node('Label2/LineEditUsername').get_text()
+	
+	slack_config.set_value('slack', 'webhook', le_slack_webhook)
+	slack_config.set_value('slack', 'username', le_slack_username)
+	slack_config.save(slack_path)
+
+func save_text_settings():
+	var text_config = ConfigFile.new()
+	var le_text_accountsid = text.get_node('Label/LineEditAccountSID').get_text()
+	var le_text_authtoken = text.get_node('Label2/LineEditAuthToken').get_text()
+	
+	text_config.set_value('text', 'accountsid', le_text_accountsid)
+	text_config.set_value('text', 'authtoken', le_text_authtoken)
+	text_config.save(text_path)
+
+func hide_settings():
 	self.hide()"
 
 [sub_resource type="GDScript" id=2]
@@ -167,7 +224,7 @@ func load_text_config():
 	if config.has_section_key('text', 'accountsid'):
 		le_accountsid.set_text(config.get_value('text', 'accountsid'))
 	if config.has_section_key('text', 'authtoken'):
-		le_authtoken.set_Text(config.get_value('text', 'authtoken'))"
+		le_authtoken.set_text(config.get_value('text', 'authtoken'))"
 
 [sub_resource type="GDScript" id=4]
 
@@ -182,6 +239,7 @@ func _ready():
 
 [node name="PanelSettings" type="Panel" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -196,6 +254,7 @@ script = SubResource( 1 )
 
 [node name="PanelOptions" type="Panel" parent="." index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -382,6 +441,8 @@ script = null
 [connection signal="pressed" from="PanelOptions/BtnSlack" to="." method="_on_BtnSlack_pressed"]
 
 [connection signal="pressed" from="PanelOptions/BtnText" to="." method="_on_BtnText_pressed"]
+
+[connection signal="pressed" from="BtnSave" to="." method="_on_BtnSave_pressed"]
 
 [connection signal="pressed" from="BtnCancle" to="." method="_on_Button2_pressed"]
 

@@ -46,16 +46,42 @@ func update_limit():
 
 script/source = "extends TextureButton
 
+var cb_discord
+var cb_email
+var cb_slack
+var cb_text
+var path = 'res://config_folder/selected_options.cfg'
+
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	pass
+	cb_discord = get_parent().get_node('Panel/HBoxContainer/CBDiscord')
+	cb_email = get_parent().get_node('Panel/HBoxContainer/CBEmail')
+	cb_slack = get_parent().get_node(\"Panel/HBoxContainer/CBSlack\")
+	cb_text = get_parent().get_node('Panel/HBoxContainer/CBText')
 
 func _on_TBSend_pressed():
+	adjust_selected_options()
 	var output = []
 	var pid = OS.execute('python3', ['../scripts/parent_script.py'], true)
-	print(pid)
-"
+	clear_options()
+
+func adjust_selected_options():
+	var config = ConfigFile.new()
+	if cb_discord.is_toggle_mode():
+		config.set_value('selected', 'discord', 'True')
+	if cb_email.is_toggle_mode():
+		config.set_value('selected', 'email', 'True')
+	if cb_slack.is_toggle_mode():
+		config.set_value('selected', 'slack', 'True')
+	if cb_text.is_toggle_mode():
+		config.set_value('selected', 'text', 'True')
+	config.save(path)
+
+func clear_options():
+	var clear_config = ConfigFile.new()
+	config.set_value('selected', 'discord', 'False')
+	config.set_value('selected', 'email', 'False')
+	config.set_value('selected', 'slack', 'False')
+	config.set_value('selected', 'text', 'False')"
 
 [node name="BaseNode" type="Node" index="0"]
 
@@ -76,7 +102,6 @@ size_flags_vertical = 1
 
 [node name="Panel" type="Panel" parent="Container" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
